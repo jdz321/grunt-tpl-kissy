@@ -25,26 +25,21 @@ module.exports = function(grunt) {
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: ['tmp']
+      tests: {src: 'build/*'}
     },
 
     // Configuration to be run (and then tested).
     tpl_kissy: {
-      default_options: {
+      main: {
         options: {
         },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!'
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
+        files: [{
+          expand: true,
+          cwd: 'src/',
+          src: '**/*-tpl.html',
+          dest: 'build/',
+          ext: '.js'
+        }]
       }
     },
 

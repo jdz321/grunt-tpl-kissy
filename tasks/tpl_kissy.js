@@ -8,6 +8,27 @@
 
 'use strict';
 
+var htmlparser = require("htmlparser2");
+
+var parseScript = function (dom) {
+  var scriptObj = {};
+  var scripts = dom.filter(function(d){
+    return d.type === 'script' && d.attribs.id && d.attribs.type === 'text/template' && d.children.length === 1;
+  });
+  if(!scripts.length){
+    return '';
+  }
+  scripts.forEach(function(s){
+    scriptObj[s.attribs.id] = s.children[0].data.split('\n').map(function(l){
+      return l.trim();
+    }).filter(function(l){
+      return l !== '';
+    }).join();
+  });
+  return JSON.stringify(scriptObj);
+  // var res = ''
+};
+
 module.exports = function(grunt) {
 
   // Please see the Grunt documentation for more information regarding task
@@ -16,8 +37,7 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('tpl_kissy', 'create template kissy module from html', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      punctuation: '.',
-      separator: ', '
+
     });
 
     // Iterate over all specified file groups.
@@ -34,16 +54,22 @@ module.exports = function(grunt) {
       }).map(function(filepath) {
         // Read file source.
         return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+      }).join();
 
-      // Handle options.
-      src += options.punctuation;
+      var handler = new htmlparser.DomHandler(function (error, dom) {
+        if (error) {
+          grunt.log.error('SyntaxError: ' + f.src.join());
+        } else {
+          grunt.file.write(f.dest, parseScript(dom));
+          grunt.log.writeln('File "' + f.dest + '" created.');
+        }
+      });
 
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
+      var parser = new htmlparser.Parser(handler);
 
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+      parser.write(src);
+      parser.done();
+
     });
   });
 
