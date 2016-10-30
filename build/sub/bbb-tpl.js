@@ -1,1 +1,1 @@
-KISSY.add('grunt-tpl-kissy/sub/bbb-tpl',function () {return {'bbb-1':'haha bbb-1','bbb-2':'haha bbb-2'}});
+KISSY.add('grunt-tpl-kissy/sub/bbb-tpl',function () {return {'bbb1':'haha bbb-1','bbb2':'haha bbb-2'}});

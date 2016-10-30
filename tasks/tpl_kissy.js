@@ -28,12 +28,17 @@ var parseScript = function (dom) {
   return scriptObj;
 };
 
+var toCamelCase = function(s){
+  return s.replace(/-\w/g, function(v){
+    return v.replace('-', '').toUpperCase();
+  });
+};
 
 var parseScriptObj = function(scriptObj){
   var arr = [], script;
   for(var key in scriptObj){
     script = '';
-    script += '\'' + key + '\':';
+    script += '\'' + toCamelCase(key) + '\':';
     script += '\'' + scriptObj[key] + '\'';
     arr.push(script);
   }
