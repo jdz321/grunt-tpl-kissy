@@ -25,8 +25,28 @@ var parseScript = function (dom) {
       return l !== '';
     }).join();
   });
-  return JSON.stringify(scriptObj);
-  // var res = ''
+  return scriptObj;
+};
+
+
+var parseScriptObj = function(scriptObj){
+  var arr = [], script;
+  for(var key in scriptObj){
+    script = '';
+    script += '\'' + key + '\':';
+    script += '\'' + scriptObj[key] + '\'';
+    arr.push(script);
+  }
+  return arr.join(',');
+};
+
+var wrapScript = function(scriptObj, src, pkg){
+  var script = 'KISSY.add(\'' + src.replace(/^src/, pkg).replace(/.html$/, '') + '\',function () {';
+  script += 'return {';
+  script += parseScriptObj(scriptObj);
+  script += '}';
+  script += '});';
+  return script;
 };
 
 module.exports = function(grunt) {
@@ -37,7 +57,7 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('tpl_kissy', 'create template kissy module from html', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-
+      packageName: ''
     });
 
     // Iterate over all specified file groups.
@@ -60,7 +80,11 @@ module.exports = function(grunt) {
         if (error) {
           grunt.log.error('SyntaxError: ' + f.src.join());
         } else {
-          grunt.file.write(f.dest, parseScript(dom));
+          // grunt.file.write(f.dest, parseScript(dom));
+          var scriptObj = parseScript(dom);
+          var script = wrapScript(scriptObj, f.src.join(), options.packageName);
+
+          grunt.file.write(f.dest, script);
           grunt.log.writeln('File "' + f.dest + '" created.');
         }
       });

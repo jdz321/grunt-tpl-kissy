@@ -1,1 +1,1 @@
-{"aaa-1":"haha aaa-1","aaa-2":"<div class=\"haha\">,<span class=\"lala\"></span>,</div>"}
+KISSY.add('grunt-tpl-kissy/aaa-tpl',function () {return {'aaa-1':'haha aaa-1','aaa-2':'<div class="haha">,<span class="lala"></span>,</div>'}});

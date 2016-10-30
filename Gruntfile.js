@@ -12,6 +12,7 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
     jshint: {
       all: [
         'Gruntfile.js',
@@ -32,6 +33,7 @@ module.exports = function(grunt) {
     tpl_kissy: {
       main: {
         options: {
+          packageName: '<%= pkg.name %>'
         },
         files: [{
           expand: true,
