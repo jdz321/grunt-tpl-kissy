@@ -26,7 +26,7 @@ module.exports = function(grunt) {
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: {src: 'build/*'}
+      tests: { src: 'build/*' }
     },
 
     // Configuration to be run (and then tested).
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'src/',
           src: '**/*-tpl.html',
-          dest: 'build/',
+          dest: 'src/',
           ext: '.js'
         }]
       }
@@ -48,6 +48,13 @@ module.exports = function(grunt) {
     // Unit tests.
     nodeunit: {
       tests: ['test/*_test.js']
+    },
+
+    watch: {
+      tpl: {
+        files: ['src/**/*-tpl.html'],
+        tasks: ['tpl_kissy']
+      }
     }
 
   });
@@ -59,10 +66,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'tpl_kissy'/**, 'nodeunit'**/]);
+  grunt.registerTask('test', ['clean', 'tpl_kissy' /**, 'nodeunit'**/ ]);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
