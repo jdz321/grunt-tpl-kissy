@@ -23,7 +23,7 @@ var parseScript = function (dom) {
       return l.trim();
     }).filter(function(l){
       return l !== '';
-    }).join();
+    }).join('');
   });
   return scriptObj;
 };
