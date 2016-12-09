@@ -38,5 +38,8 @@
   ],
   "dependencies": {
     "htmlparser2": "^3.9.2"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npm.alibaba-inc.com"
   }
 }

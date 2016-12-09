@@ -8,7 +8,7 @@ This plugin requires Grunt `~0.4.5`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-tpl-kissy --save-dev
+tnpm install grunt-tpl-kissy -D
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
@@ -26,11 +26,15 @@ In your project's Gruntfile, add a section named `tpl_kissy` to the data object 
 grunt.initConfig({
   tpl_kissy: {
     options: {
-      // Task-specific options go here.
+      packageName: 'packageName'
     },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
+    files: [{
+      expand: true,
+      cwd: 'src/',
+      src: '**/*-tpl.html',
+      dest: 'src/',
+      ext: '.js'
+    }]
   },
 });
 ```
