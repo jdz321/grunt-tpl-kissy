@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "homepage": "https://github.com/jdz321/grunt-tpl-kissy",
   "author": {
-    "name": "石濑",
-    "email": "dongzhe.jdz@alibaba-inc.com"
+    "name": "spark",
+    "email": "jdz321@163.com"
   },
   "repository": {
     "type": "git",
@@ -38,8 +38,5 @@
   ],
   "dependencies": {
     "htmlparser2": "^3.9.2"
-  },
-  "publishConfig": {
-    "registry": "http://registry.npm.alibaba-inc.com"
   }
 }
