@@ -16,7 +16,7 @@ var parseScript = function (dom) {
     return d.type === 'script' && d.attribs.id && d.attribs.type === 'text/template' && d.children.length === 1;
   });
   if(!scripts.length){
-    return '';
+    return scriptObj;
   }
   scripts.forEach(function(s){
     scriptObj[s.attribs.id] = s.children[0].data.split('\n').map(function(l){
