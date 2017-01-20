@@ -41,53 +41,81 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.packageName
 Type: `String`
-Default value: `',  '`
+Default value: `""`
+Current project name, as kissy module's prefix
 
-A string value that is used to do something with whatever.
+```
+KISSY.add('packageName/aaa-tpl',function () {})
+```
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
 
 ### Usage Examples
-
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
-
-```js
+Gruntfile.js
+```
 grunt.initConfig({
   tpl_kissy: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
+    main: {
+      options: {
+        packageName: 'package-name'
+      },
+      files: [{
+        expand: true,
+        cwd: 'src/',
+        src: '**/*-tpl.html',
+        dest: 'src/',
+        ext: '.js'
+      }]
+    }
+  }
+})
+
+grunt.registerTask('default', ['tpl_kissy']);
+
+```
+aaa-tpl.html
+```
+<script id="aaa-aaa-1" type="text/template">
+  haha aaa-1
+</script>
+
+<script id="aaa-2" type="text/template">
+  <div class="haha">
+    <span class="lala"></span>
+  </div>
+</script>
+```
+just run `$ grunt`
+
+File "src/aaa-tpl.js" will be created. seems like
+```
+KISSY.add('grunt-tpl-kissy/aaa-tpl',function () {
+  return {
+    'aaaAaa1':'haha aaa-1',
+    'aaa2':'<div class="haha"><span class="lala"></span></div>'
+    }
+  }
+);
 ```
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
-
-```js
+It can also work well with `grunt-contrib-watch`
+Gruntfile.js
+```
 grunt.initConfig({
-  tpl_kissy: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
+  watch: {
+    tpl: {
+      files: ['src/**/*-tpl.html'],
+      tasks: ['tpl_kissy']
+    }
+  }
+})
 ```
+`grunt watch:tpl`, and then get free from `js template`,
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
 _(Nothing yet)_
+
