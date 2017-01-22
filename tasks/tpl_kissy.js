@@ -46,7 +46,8 @@ var parseScriptObj = function(scriptObj){
 };
 
 var wrapScript = function(scriptObj, src, pkg){
-  var script = 'KISSY.add(\'' + src.replace(/^src/, pkg).replace(/.html$/, '') + '\',function () {';
+  var moduleName = pkg ? '\'' + src.replace(/^src/, pkg).replace(/.html$/, '') + '\',' : '';
+  var script = 'KISSY.add(' + moduleName + 'function () {';
   script += 'return {';
   script += parseScriptObj(scriptObj);
   script += '}';
