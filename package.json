@@ -1,7 +1,7 @@
 {
   "name": "grunt-tpl-kissy",
   "description": "create template kissy module from html",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "homepage": "https://github.com/jdz321/grunt-tpl-kissy",
   "author": {
     "name": "spark",
@@ -37,6 +37,7 @@
     "gruntplugin"
   ],
   "dependencies": {
-    "htmlparser2": "^3.9.2"
+    "htmlparser2": "^3.9.2",
+    "js-beautify": "^1.6.8"
   }
 }

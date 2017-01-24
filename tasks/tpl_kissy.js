@@ -9,6 +9,7 @@
 'use strict';
 
 var htmlparser = require("htmlparser2");
+var beautify = require('js-beautify').js_beautify;
 
 var parseScript = function (dom) {
   var scriptObj = {};
@@ -45,8 +46,36 @@ var parseScriptObj = function(scriptObj){
   return arr.join(',');
 };
 
-var wrapScript = function(scriptObj, src, pkg){
-  var moduleName = pkg ? '\'' + src.replace(/^src/, pkg).replace(/.html$/, '') + '\',' : '';
+var getModuleName = function(src, options){
+  var 
+    packageName = options.packageName,
+    prefix = options.prefix,
+    pathDeep = options.pathDeep;
+  pathDeep = isNaN(pathDeep) ? 0 : parseInt(pathDeep, 10);
+  var
+    moduleName = '';
+  if(packageName && !prefix){
+    moduleName = src.replace(/^src/, packageName).replace(/.html$/, '');
+  }
+  if(prefix){
+    var arr = src.split('/');
+    while(pathDeep--){
+      arr.shift();
+    }
+    if(arr.length)
+      moduleName = (prefix + '/' + arr.join('/')).replace(/.html$/, '');
+    else
+      console.log('deep more than path: '.red, src.red);
+  }
+  return moduleName;
+}
+
+var wrapScript = function(scriptObj, src, options){
+  var moduleName = '';
+  if(options.named){
+    moduleName = getModuleName(src, options);
+    moduleName = moduleName ? '\'' + moduleName + '\',' : '';
+  }
   var script = 'KISSY.add(' + moduleName + 'function () {';
   script += 'return {';
   script += parseScriptObj(scriptObj);
@@ -63,7 +92,10 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('tpl_kissy', 'create template kissy module from html', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      packageName: ''
+      named: true,
+      packageName: '',
+      prefix: '',
+      pathDeep: 0
     });
 
     // Iterate over all specified file groups.
@@ -88,9 +120,9 @@ module.exports = function(grunt) {
         } else {
           // grunt.file.write(f.dest, parseScript(dom));
           var scriptObj = parseScript(dom);
-          var script = wrapScript(scriptObj, f.src.join(), options.packageName);
+          var script = wrapScript(scriptObj, f.src.join(), options);
 
-          grunt.file.write(f.dest, script);
+          grunt.file.write(f.dest, beautify(script, {indent_size: 2}));
           grunt.log.writeln('File "' + f.dest + '" created.');
         }
       });

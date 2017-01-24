@@ -33,7 +33,9 @@ module.exports = function(grunt) {
     tpl_kissy: {
       main: {
         options: {
-          packageName: '<%= pkg.name %>'
+          packageName: '<%= pkg.name %>',
+          prefix: 'xxx',
+          pathDeep: 0
         },
         files: [{
           expand: true,

@@ -26,7 +26,10 @@ In your project's Gruntfile, add a section named `tpl_kissy` to the data object 
 grunt.initConfig({
   tpl_kissy: {
     options: {
-      packageName: 'packageName'
+      named: true,
+      packageName: 'packageName',
+      prefix: '',
+      deep: 0
     },
     files: [{
       expand: true,
@@ -41,15 +44,37 @@ grunt.initConfig({
 
 ### Options
 
+#### options.named
+Type: `Boolean`
+Default value: `true`
+如果 `named` 被设置为 `false`,将输出匿名模块 
+
 #### options.packageName
 Type: `String`
 Default value: `""`
-Current project name, as kissy module's prefix
+作为模块的默认前缀， packageName 作为模块前缀时 `options.deep` 被视为 `1` 
 
 ```
 KISSY.add('packageName/aaa-tpl',function () {})
 ```
 
+#### options.prefix
+Type: `String`
+Default value: `""`
+设置模块前缀，`prefix` 有值时，`options.packageName` 将被忽略
+
+#### options.deep
+Type: `Number`
+Default value: `0`
+设置模块名前缀的位置，例如：
+```
+src: src/widgets/deep/path/example-tpl.html
+prefix: moduleName
+
+KISSY.add('packageName/src/widgets/deep/path/example-tpl',function () {}) // deep = 0
+KISSY.add('packageName/deep/path/example-tpl',function () {}) // deep = 2
+```
+deep大于src path的层级时，将输出匿名模块。
 
 ### Usage Examples
 Gruntfile.js
@@ -117,5 +142,7 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+- 0.1.0 Initial Release
+- 0.2.0 Support anonymous module and custom module prefix
+
 
